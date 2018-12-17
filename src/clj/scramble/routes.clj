@@ -1,15 +1,14 @@
 (ns scramble.routes
-  (:require [clojure.java.io :as io]
-            [compojure.core :refer [ANY GET PUT POST DELETE routes]]
+  (:require [compojure.core :refer [GET POST routes context]]
             [compojure.route :refer [resources]]
-            [ring.util.response :refer [response]]))
+            [scramble.api.scramble :refer [scramble-api]]
+            [scramble.views.index :refer [index-view]]))
 
-(defn home-routes [endpoint]
+(defn scramble-routes [endpoint]
   (routes
-   (GET "/" _
-     (-> "public/index.html"
-         io/resource
-         io/input-stream
-         response
-         (assoc :headers {"Content-Type" "text/html; charset=utf-8"})))
-   (resources "/")))
+    (GET "/" _
+        (index-view))
+    (context "/api" _
+            (POST "/scramble" [source destination]
+                  (scramble-api source destination)))
+    (resources "/")))

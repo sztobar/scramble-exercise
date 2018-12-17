@@ -7,11 +7,11 @@
             [system.components.middleware :refer [new-middleware]]
             [system.components.jetty :refer [new-web-server]]
             [scramble.config :refer [config]]
-            [scramble.routes :refer [home-routes]]))
+            [scramble.routes :refer [scramble-routes]]))
 
 (defn app-system [config]
   (component/system-map
-   :routes     (new-endpoint home-routes)
+   :routes     (new-endpoint scramble-routes)
    :middleware (new-middleware {:middleware (:middleware config)})
    :handler    (-> (new-handler)
                    (component/using [:routes :middleware]))
